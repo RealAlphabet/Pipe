@@ -1,0 +1,10 @@
+# Ignore everything
+/*
+
+# Not README
+!README
+!.gitignore
+
+# Not src and lib
+!/lib
+!/src
