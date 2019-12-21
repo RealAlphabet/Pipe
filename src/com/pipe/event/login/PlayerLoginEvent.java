@@ -64,7 +64,7 @@ public class PlayerLoginEvent extends Event {
         return hostIp;
     }
 
-    public String  getHostPort() {
+    public String getHostPort() {
         return hostPort;
     }
 

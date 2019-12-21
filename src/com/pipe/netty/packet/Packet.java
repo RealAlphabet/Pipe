@@ -6,9 +6,14 @@ import java.io.IOException;
 
 public interface Packet<T> {
 
-    default void read(PacketBuffer buf) throws IOException {}
+    default void read(PacketBuffer buf) throws IOException {
+    }
 
-    default void write(PacketBuffer buf) throws IOException {}
+    default void write(PacketBuffer buf) throws IOException {
+    }
 
-    default void process(T handler) {};
+    default void process(T handler) {
+    }
+
+    ;
 }

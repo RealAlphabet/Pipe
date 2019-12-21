@@ -2,14 +2,14 @@ package com.pipe.netty.packet.play;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import com.pipe.netty.PacketBuffer;
 import com.pipe.netty.handler.INetHandlerPlay;
 import com.pipe.netty.packet.Packet;
 import com.pipe.util.text.ITextComponent;
 import com.pipe.util.text.TextComponentString;
 import com.pipe.world.EnumGameType;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 
 import java.util.List;
 

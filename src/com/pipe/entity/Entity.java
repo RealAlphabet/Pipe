@@ -59,10 +59,10 @@ public abstract class Entity {
 
     public void setFlag(int flag, boolean value) {
         if (value)
-            FLAGS = (byte)(FLAGS | (1 << flag));
+            FLAGS = (byte) (FLAGS | (1 << flag));
 
         else {
-            FLAGS = (byte)(FLAGS & ~(1 << flag));
+            FLAGS = (byte) (FLAGS & ~(1 << flag));
         }
     }
 
@@ -90,8 +90,6 @@ public abstract class Entity {
     public void setGlowing(boolean glowing) {
         setFlag(6, glowing);
     }
-
-
 
 
     ///////////////////////////////////////////////////////////////////////////

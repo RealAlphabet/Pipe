@@ -6,12 +6,12 @@ import com.google.common.collect.Maps;
 import com.pipe.netty.packet.Packet;
 import com.pipe.netty.packet.SPacketDisconnect;
 import com.pipe.netty.packet.handshake.C00Handshake;
+import com.pipe.netty.packet.login.*;
+import com.pipe.netty.packet.play.*;
 import com.pipe.netty.packet.status.CPacketPing;
 import com.pipe.netty.packet.status.CPacketServerQuery;
 import com.pipe.netty.packet.status.SPacketPong;
 import com.pipe.netty.packet.status.SPacketServerInfo;
-import com.pipe.netty.packet.login.*;
-import com.pipe.netty.packet.play.*;
 
 import java.util.Map;
 

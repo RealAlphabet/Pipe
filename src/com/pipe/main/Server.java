@@ -69,9 +69,8 @@ public class Server {
         ChannelFuture future = new ServerBootstrap()
                 .group(bossGroup, workGroup)
                 .channel((Epoll.isAvailable() ? EpollServerSocketChannel.class : NioServerSocketChannel.class))
-
                 .childOption(ChannelOption.TCP_NODELAY, true)
-                .childHandler(new ChannelInitializer<>() {
+                .childHandler(new ChannelInitializer<Channel>() {
                     @Override
                     protected void initChannel(Channel channel) {
                         channel.pipeline()
@@ -88,7 +87,6 @@ public class Server {
                         channel.pipeline().addLast(networkManager);
                     }
                 })
-
                 .bind(25565)
                 .awaitUninterruptibly();
 
@@ -97,7 +95,7 @@ public class Server {
         if (future.isSuccess()) {
             listener = future.channel();
 
-            System.out.println("§6Listening on 25565 port.");
+            System.out.println("Listening on 25565 port.");
 
             ///////////////
 
@@ -181,9 +179,9 @@ public class Server {
         for (EntityPlayer player : playerList) {
             player.connection.sendPacket(new SPacketKeepAlive(new Random().nextInt()));
 
-            short encodedPosX = (short)((player.posX * 32 - player.prevPosX * 32) * 128);
-            short encodedPosY = (short)((player.posY * 32 - player.prevPosY * 32) * 128);
-            short encodedPosZ = (short)((player.posZ * 32 - player.prevPosZ * 32) * 128);
+            short encodedPosX = (short) ((player.posX * 32 - player.prevPosX * 32) * 128);
+            short encodedPosY = (short) ((player.posY * 32 - player.prevPosY * 32) * 128);
+            short encodedPosZ = (short) ((player.posZ * 32 - player.prevPosZ * 32) * 128);
 
             int encodedYaw = MathHelper.floor(player.yaw * 256.0F / 360.0F);
             int encodedPitch = MathHelper.floor(player.pitch * 256.0F / 360.0F);
@@ -196,7 +194,7 @@ public class Server {
 
                 // UPDATE POSITION
                 if (teleportTicks == 400) {
-                    other.connection.sendPacket(new SPacketEntityTeleport(player.id, player.posX, player.posY, player.posZ,  (byte) encodedYaw, (byte) encodedPitch, true));
+                    other.connection.sendPacket(new SPacketEntityTeleport(player.id, player.posX, player.posY, player.posZ, (byte) encodedYaw, (byte) encodedPitch, true));
 
                 } else {
                     if (moving) {
@@ -204,7 +202,7 @@ public class Server {
 //                            other.connection.sendPacket(new SPacketEntity.SPacketEntityLookMove(player.id, encodedPosX, encodedPosY, encodedPosZ, (byte) encodedYaw, (byte) encodedPitch, true));
 //
 //                        } else {
-                            other.connection.sendPacket(new SPacketEntity.SPacketEntityRelMove(player.id, encodedPosX, encodedPosY, encodedPosZ, true));
+                        other.connection.sendPacket(new SPacketEntity.SPacketEntityRelMove(player.id, encodedPosX, encodedPosY, encodedPosZ, true));
 //                        }
 
                     } else if (rotating) {

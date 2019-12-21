@@ -1,9 +1,9 @@
 package com.pipe.netty.packet.login;
 
+import com.mojang.authlib.GameProfile;
 import com.pipe.netty.PacketBuffer;
 import com.pipe.netty.handler.INetHandlerLogin;
 import com.pipe.netty.packet.Packet;
-import com.mojang.authlib.GameProfile;
 
 public class SPacketLoginSuccess implements Packet<INetHandlerLogin> {
 

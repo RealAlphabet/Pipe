@@ -5,12 +5,11 @@ import com.pipe.entity.EntityPlayer;
 import com.pipe.main.Server;
 import com.pipe.netty.NetworkManager;
 import com.pipe.netty.packet.Packet;
-import com.pipe.util.text.ITextComponent;
-import com.pipe.util.text.TextComponentString;
-import com.pipe.world.BlockPos;
 import com.pipe.netty.packet.play.*;
-
-import java.nio.channels.Channel;
+import com.pipe.netty.packet.play.SPacketAnimation.EnumAnimation;
+import com.pipe.util.EnumHand;
+import com.pipe.util.text.ITextComponent;
+import com.pipe.world.BlockPos;
 
 public class PlayerConnection implements INetHandlerPlay, INetHandler {
 
@@ -34,16 +33,22 @@ public class PlayerConnection implements INetHandlerPlay, INetHandler {
 
     ///////////////////////////////////////////////////////////////////////////
 
-    @Override
+    @Override   // FINISH
     public void handleAnimation(CPacketAnimation packet) {
+        EnumAnimation animation = (packet.getHand() == EnumHand.MAIN_HAND)
+                ? EnumAnimation.SWING_MAINHAND
+                : EnumAnimation.SWING_OFFHAND;
+
         for (EntityPlayer entityPlayer : Server.playerList) {
-            if (entityPlayer == this.entityPlayer) continue;
-            entityPlayer.connection.sendPacket(new SPacketAnimation(this.entityPlayer, SPacketAnimation.EnumAnimation.SWING_MAINHAND));
-            entityPlayer.connection.sendPacket(new SPacketAnimation(this.entityPlayer, SPacketAnimation.EnumAnimation.TAKE_DAMAGE));
+            if (entityPlayer == this.entityPlayer) {
+                continue;
+            }
+
+            entityPlayer.connection.sendPacket(new SPacketAnimation(this.entityPlayer, animation));
         }
     }
 
-    @Override
+    @Override   // FINISH
     public void handleChatMessage(CPacketChatMessage packet) {
         String message = packet.getMessage();
 
@@ -56,7 +61,7 @@ public class PlayerConnection implements INetHandlerPlay, INetHandler {
 
     @Override
     public void handleTabComplete(CPacketTabComplete packet) {
-
+        System.out.println("TAB : " + packet.getMessage());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.pipe.netty.handler;
 
+import com.mojang.authlib.GameProfile;
 import com.pipe.entity.EntityPlayer;
 import com.pipe.main.Server;
 import com.pipe.netty.EnumConnectionState;
@@ -7,6 +8,7 @@ import com.pipe.netty.NetworkManager;
 import com.pipe.netty.packet.login.CPacketEncryptionResponse;
 import com.pipe.netty.packet.login.CPacketLoginStart;
 import com.pipe.netty.packet.login.SPacketLoginSuccess;
+import com.pipe.netty.packet.play.*;
 import com.pipe.util.text.ITextComponent;
 import com.pipe.util.text.TextComponentString;
 import com.pipe.world.BlockPos;
@@ -14,8 +16,6 @@ import com.pipe.world.EnumDifficulty;
 import com.pipe.world.EnumGameType;
 import com.pipe.world.EnumWorldType;
 import com.pipe.world.chunk.Chunk;
-import com.mojang.authlib.GameProfile;
-import com.pipe.netty.packet.play.*;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;

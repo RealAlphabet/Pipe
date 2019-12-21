@@ -22,7 +22,7 @@ public class ChunkSection {
                 for (int z = 0; z < 16; z++) {
                     this.skylightArray.set(x, y, z, 0xFF);
                     this.blocklightArray.set(x, y, z, 0xFF);
-                    data.set(x, y, z,  1 << 4 | 2);
+                    data.set(x, y, z, 1 << 4 | 2);
                 }
             }
         }
