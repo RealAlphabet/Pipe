@@ -1,10 +1,15 @@
 # Ignore everything
-/*
+*
 
-# Not README
+# Except README
 !README
+
+# Except .gitignore
 !.gitignore
 
-# Not src and lib
-!/lib
-!/src
+# Except src
+!*.jar
+!*.java
+
+# In subdirectories
+!*/

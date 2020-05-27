@@ -16,10 +16,6 @@ public class CPacketClientStatus implements Packet<INetHandlerPlay> {
     }
 
     @Override
-    public void write(PacketBuffer buf) {
-    }
-
-    @Override
     public void process(INetHandlerPlay handler) {
         handler.handleClientStatus(this);
     }

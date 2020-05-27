@@ -19,16 +19,12 @@ public class CPacketClientSettings implements Packet<INetHandlerPlay> {
 
     @Override
     public void read(PacketBuffer buf) {
-        lang = buf.readStringFromBuffer(16);
-        view = buf.readByte();
-        chatVisibility = buf.readEnumValue(EnumChatVisibility.class);
-        enableColors = buf.readBoolean();
-        modelPartFlags = buf.readUnsignedByte();
-        mainHand = buf.readEnumValue(EnumHandSide.class);
-    }
-
-    @Override
-    public void write(PacketBuffer buf) {
+        this.lang = buf.readStringFromBuffer(16);
+        this.view = buf.readByte();
+        this.chatVisibility = buf.readEnumValue(EnumChatVisibility.class);
+        this.enableColors = buf.readBoolean();
+        this.modelPartFlags = buf.readUnsignedByte();
+        this.mainHand = buf.readEnumValue(EnumHandSide.class);
     }
 
     @Override

@@ -5,18 +5,32 @@ import com.pipe.netty.handler.INetHandlerPlay;
 import com.pipe.netty.packet.Packet;
 
 public class SPacketEntityStatus implements Packet<INetHandlerPlay> {
-    @Override
-    public void read(PacketBuffer buf) {
 
+    private int entityId;
+    private EnumEntityStatus status;
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    public SPacketEntityStatus(int entityId, EnumEntityStatus status) {
+        this.entityId = entityId;
+        this.status = status;
     }
+
+    ///////////////////////////////////////////////////////////////////////////
 
     @Override
     public void write(PacketBuffer buf) {
-
+        buf.writeInt(entityId);
+        buf.writeByte(status.ordinal());
     }
 
-    @Override
-    public void process(INetHandlerPlay handler) {
+    ///////////////////////////////////////////////////////////////////////////
 
+    // TODO
+    public enum EnumEntityStatus {
+        TIPPED_ARROW,
+        RABBIT_JUMP,
+        HURT,
+        DIE
     }
 }

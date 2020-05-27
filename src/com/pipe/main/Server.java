@@ -10,6 +10,7 @@ import com.pipe.netty.coder.PacketEncoder;
 import com.pipe.netty.coder.VarintFrameDecoder;
 import com.pipe.netty.coder.VarintFrameEncoder;
 import com.pipe.netty.handler.NetHandlerHandshake;
+import com.pipe.netty.packet.Packet;
 import com.pipe.netty.packet.play.*;
 import com.pipe.util.MathHelper;
 import com.pipe.util.text.ITextComponent;
@@ -28,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class Server {
 
     private static Server SERVER;
-    public static List<EntityPlayer> playerList = new ArrayList<>();
+    public static List<EntityPlayer> playerList = Collections.synchronizedList(new ArrayList<>());
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -99,17 +100,27 @@ public class Server {
 
             ///////////////
 
-            long tickTime = 1000L / 20L;
-            long currentTime = 0L;
-            long prevTick = 0L;
+            long tickTime = 50L;
+            long currentTime = System.currentTimeMillis();
+            long i = 0L;
+            long j;
 
             while (running) {
-                if (currentTime - prevTick > tickTime) {
-                    prevTick = currentTime;
+                j = System.currentTimeMillis();
+
+                i += j - currentTime;
+                currentTime = j;
+
+                while (i > tickTime) {
+                    i -= tickTime;
                     update();
                 }
 
-                currentTime = System.currentTimeMillis();
+                try {
+                    Thread.sleep(Math.max(1L, tickTime - i));
+                } catch (InterruptedException e) {
+                    // IGNORE
+                }
             }
 
         } else {
@@ -131,18 +142,7 @@ public class Server {
 
                 ///////////////
 
-                // TODO disconnect all clients with a specific message
-
-//                Server.this.connectionLock.readLock().lock();
-//
-//                try {
-//                    for (UserConnection protocol : Server.this.connections) {
-//                        protocol.getHandle().close(new SMessage("Eagle", ComponentSerializer.toString(new TextComponent("\n§6Redémarrage du serveur de Eagle, à tout de suite !\n "))));
-//                    }
-//
-//                } finally {
-//                    Server.this.connectionLock.readLock().unlock();
-//                }
+                // TODO KICK ALL PLAYERS
 
                 ///////////////
 
@@ -161,7 +161,8 @@ public class Server {
                         workGroup.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
                         break;
 
-                    } catch (InterruptedException ignore) {
+                    } catch (InterruptedException e) {
+                        // IGNORE
                     }
                 }
 
@@ -183,8 +184,8 @@ public class Server {
             short encodedPosY = (short) ((player.posY * 32 - player.prevPosY * 32) * 128);
             short encodedPosZ = (short) ((player.posZ * 32 - player.prevPosZ * 32) * 128);
 
-            int encodedYaw = MathHelper.floor(player.yaw * 256.0F / 360.0F);
-            int encodedPitch = MathHelper.floor(player.pitch * 256.0F / 360.0F);
+            byte encodedYaw = (byte) MathHelper.floor(player.yaw * 256.0F / 360.0F);
+            byte encodedPitch = (byte) MathHelper.floor(player.pitch * 256.0F / 360.0F);
 
             boolean moving = encodedPosX != 0 || encodedPosY != 0 || encodedPosZ != 0;
             boolean rotating = player.prevYaw != player.yaw || player.prevPitch != player.pitch;
@@ -194,23 +195,21 @@ public class Server {
 
                 // UPDATE POSITION
                 if (teleportTicks == 400) {
-                    other.connection.sendPacket(new SPacketEntityTeleport(player.id, player.posX, player.posY, player.posZ, (byte) encodedYaw, (byte) encodedPitch, true));
+                    other.connection.sendPacket(new SPacketEntityTeleport(player.id, player.posX, player.posY, player.posZ, encodedYaw, encodedPitch, true));
 
-                } else {
+                } else if (rotating) {
                     if (moving) {
-//                        if (rotating) {
-//                            other.connection.sendPacket(new SPacketEntity.SPacketEntityLookMove(player.id, encodedPosX, encodedPosY, encodedPosZ, (byte) encodedYaw, (byte) encodedPitch, true));
-//
-//                        } else {
-                        other.connection.sendPacket(new SPacketEntity.SPacketEntityRelMove(player.id, encodedPosX, encodedPosY, encodedPosZ, true));
-//                        }
+                        other.connection.sendPacket(new SPacketEntity.SPacketEntityLookMove(player.id, encodedPosX, encodedPosY, encodedPosZ, encodedYaw, encodedPitch, true));
 
-                    } else if (rotating) {
-                        other.connection.sendPacket(new SPacketEntity.SPacketEntityLook(player.id, (byte) encodedYaw, (byte) encodedPitch, true));
+                    } else {
+                        other.connection.sendPacket(new SPacketEntity.SPacketEntityLook(player.id, encodedYaw, encodedPitch, true));
                     }
+
+                } else if (moving) {
+                    other.connection.sendPacket(new SPacketEntity.SPacketEntityRelMove(player.id, encodedPosX, encodedPosY, encodedPosZ, true));
                 }
 
-                other.connection.sendPacket(new SPacketEntityHeadLook(player, (byte) encodedYaw));
+                other.connection.sendPacket(new SPacketEntityHeadLook(player.id, encodedYaw));
                 other.connection.sendPacket(new SPacketEntityMetadata(player.id, player.FLAGS));
             }
 
@@ -223,10 +222,8 @@ public class Server {
 
         if (teleportTicks == 400)
             teleportTicks = 0;
-
-        else {
+        else
             teleportTicks++;
-        }
     }
 
 
@@ -240,6 +237,10 @@ public class Server {
 
     public void broadcastMessage(ITextComponent component) {
         playerList.forEach(player -> player.sendMessage(component));
+    }
+
+    public void broadcastPacket(Packet packet) {
+        playerList.forEach(player -> player.connection.sendPacket(packet));
     }
 
 
@@ -261,6 +262,7 @@ public class Server {
 
     public void registerConnection(EntityPlayer player) {
         playerList.add(player);
+        player.connection.sendPacket(new SPacketPlayerListItem(player.profile, SPacketPlayerListItem.Action.ADD_PLAYER));
 
         for (EntityPlayer other : playerList) {
             if (other == player) return;

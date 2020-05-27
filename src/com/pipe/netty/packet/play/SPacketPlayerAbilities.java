@@ -20,40 +20,29 @@ public class SPacketPlayerAbilities implements Packet<INetHandlerPlay> {
         flying = true;
         allowFlying = true;
         flySpeed = 0.1F;
+        walkSpeed = 0.1F;
     }
 
     ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public void read(PacketBuffer buf) {
-    }
-
-    @Override
     public void write(PacketBuffer buf) {
         byte b0 = 0;
 
-        if (this.invulnerable) {
+        if (this.invulnerable)
             b0 = (byte) (b0 | 1);
-        }
 
-        if (this.flying) {
+        if (this.flying)
             b0 = (byte) (b0 | 2);
-        }
 
-        if (this.allowFlying) {
+        if (this.allowFlying)
             b0 = (byte) (b0 | 4);
-        }
 
-        if (this.creativeMode) {
+        if (this.creativeMode)
             b0 = (byte) (b0 | 8);
-        }
 
         buf.writeByte(b0);
         buf.writeFloat(this.flySpeed);
         buf.writeFloat(this.walkSpeed);
-    }
-
-    @Override
-    public void process(INetHandlerPlay handler) {
     }
 }

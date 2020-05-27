@@ -65,7 +65,7 @@ public class SPacketEntity implements Packet<INetHandlerPlay> {
 
         public SPacketEntityLookMove(int entityId, short posX, short posY, short posZ, byte yaw, byte pitch, boolean onGround) {
             super(entityId);
-            this.posX = posZ;
+            this.posX = posX;
             this.posY = posY;
             this.posZ = posZ;
             this.yaw = yaw;

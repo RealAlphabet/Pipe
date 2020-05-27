@@ -34,18 +34,12 @@ public class SPacketJoinGame implements Packet<INetHandlerPlay> {
     ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public void read(PacketBuffer buf) {
-
-    }
-
-    @Override
     public void write(PacketBuffer buf) {
         buf.writeInt(playerId);
         int i = gameType.getId();
 
-        if (hardcore) {
+        if (hardcore)
             i |= 8;
-        }
 
         buf.writeByte(i);
         buf.writeInt(dimension);
@@ -53,9 +47,5 @@ public class SPacketJoinGame implements Packet<INetHandlerPlay> {
         buf.writeByte(maxPlayers);
         buf.writeString(worldType.getName());
         buf.writeBoolean(reducedDebugInfo);
-    }
-
-    @Override
-    public void process(INetHandlerPlay handler) {
     }
 }

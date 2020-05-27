@@ -1,6 +1,5 @@
 package com.pipe.netty.packet.play;
 
-import com.pipe.entity.Entity;
 import com.pipe.netty.PacketBuffer;
 import com.pipe.netty.handler.INetHandlerPlay;
 import com.pipe.netty.packet.Packet;
@@ -12,8 +11,8 @@ public class SPacketAnimation implements Packet<INetHandlerPlay> {
 
     ///////////////////////////////////////////////////////////////////////////
 
-    public SPacketAnimation(Entity entity, EnumAnimation type) {
-        this.entityId = entity.id;
+    public SPacketAnimation(int entityId, EnumAnimation type) {
+        this.entityId = entityId;
         this.type = type;
     }
 

@@ -3,20 +3,22 @@ package com.pipe.netty.packet.play;
 import com.pipe.netty.PacketBuffer;
 import com.pipe.netty.handler.INetHandlerPlay;
 import com.pipe.netty.packet.Packet;
+import com.pipe.world.EnumDifficulty;
 
 public class SPacketServerDifficulty implements Packet<INetHandlerPlay> {
-    @Override
-    public void read(PacketBuffer buf) {
 
+    private EnumDifficulty difficulty;
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    public SPacketServerDifficulty(EnumDifficulty difficulty) {
+        this.difficulty = difficulty;
     }
+
+    ///////////////////////////////////////////////////////////////////////////
 
     @Override
     public void write(PacketBuffer buf) {
-
-    }
-
-    @Override
-    public void process(INetHandlerPlay handler) {
-
+        buf.writeByte(this.difficulty.getId());
     }
 }

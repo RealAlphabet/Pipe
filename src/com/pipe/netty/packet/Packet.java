@@ -14,6 +14,4 @@ public interface Packet<T> {
 
     default void process(T handler) {
     }
-
-    ;
 }

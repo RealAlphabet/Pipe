@@ -5,18 +5,25 @@ import com.pipe.netty.handler.INetHandlerPlay;
 import com.pipe.netty.packet.Packet;
 
 public class SPacketCustomPayload implements Packet<INetHandlerPlay> {
-    @Override
-    public void read(PacketBuffer buf) {
 
+    private String channel;
+    private PacketBuffer data;
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    public SPacketCustomPayload(String channel, PacketBuffer data) {
+        this.channel = channel;
+        this.data = data;
+
+        if (data.writerIndex() > 1048576)
+            throw new IllegalArgumentException("Payload may not be larger than 1048576 bytes");
     }
+
+    ///////////////////////////////////////////////////////////////////////////
 
     @Override
     public void write(PacketBuffer buf) {
-
-    }
-
-    @Override
-    public void process(INetHandlerPlay handler) {
-
+        buf.writeString(this.channel);
+        buf.writeBytes(this.data);
     }
 }

@@ -29,6 +29,7 @@ public abstract class Entity {
 
     public byte FLAGS;
 
+    public float health;
     public float fallDistance;
     public boolean onGround;
     public boolean glowing;
@@ -37,6 +38,7 @@ public abstract class Entity {
     public Entity() {
         this.id = entityCount++;
         this.passengers = Collections.emptyList();
+        this.health = 20.0F;
     }
 
 

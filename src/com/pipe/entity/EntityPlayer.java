@@ -1,9 +1,11 @@
 package com.pipe.entity;
 
 import com.mojang.authlib.GameProfile;
+import com.pipe.main.Server;
 import com.pipe.netty.handler.PlayerConnection;
 import com.pipe.netty.packet.SPacketDisconnect;
 import com.pipe.netty.packet.play.SPacketChat;
+import com.pipe.netty.packet.play.SPacketEntityTeleport;
 import com.pipe.netty.packet.play.SPacketHeldItemChange;
 import com.pipe.netty.packet.play.SPacketPlayerPosLook;
 import com.pipe.util.text.ChatType;
@@ -11,6 +13,7 @@ import com.pipe.util.text.ITextComponent;
 import com.pipe.util.text.TextComponentString;
 import com.pipe.util.world.Location;
 
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.UUID;
 
@@ -18,8 +21,8 @@ public class EntityPlayer extends Player {
 
     public GameProfile profile;
     public PlayerConnection connection;
-    public boolean allowFlying;
-    public boolean isFlying;
+
+    ///////////////////////////////////////////////////////////////////////////
 
     public EntityPlayer(GameProfile profile) {
         this.profile = profile;
@@ -72,13 +75,24 @@ public class EntityPlayer extends Player {
 
     @Override
     public void teleport(double posX, double posY, double posZ, float yaw, float pitch) {
-        this.posX = posX;
-        this.posY = posY;
-        this.posZ = posZ;
-        this.yaw = yaw;
-        this.pitch = pitch;
+        SPacketEntityTeleport packetEntityTeleport = new SPacketEntityTeleport(id, posX, posY, posZ, yaw, pitch, true);
 
-        connection.sendPacket(new SPacketPlayerPosLook(posX, posY, posZ, yaw, pitch, EnumSet.noneOf(SPacketPlayerPosLook.EnumFlags.class), 0));
+        setLocation(posX, posY, posZ, yaw, pitch);
+
+        for (Player player : Server.getServer().getOnlinePlayers()) {
+            if (player == this) return;
+            ((EntityPlayer) player).connection.sendPacket(packetEntityTeleport);
+        }
+    }
+
+    public void setLocation(double posX, double posY, double posZ, float yaw, float pitch) {
+        this.prevPosX = this.posX = posX;
+        this.prevPosY = this.posY = posY;
+        this.prevPosZ = this.posZ = posZ;
+        this.prevYaw = this.yaw = yaw;
+        this.prevPitch = this.pitch = pitch;
+
+        connection.sendPacket(new SPacketPlayerPosLook(posX, posY, posZ, yaw, pitch, Collections.emptySet(), 0));
     }
 
 
@@ -117,12 +131,12 @@ public class EntityPlayer extends Player {
     }
 
     @Override
-    public UUID getUUID() {
-        return profile.getId();
+    public String getName() {
+        return profile.getName();
     }
 
     @Override
-    public String getName() {
-        return profile.getName();
+    public UUID getUUID() {
+        return profile.getId();
     }
 }

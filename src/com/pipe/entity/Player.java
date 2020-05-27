@@ -36,7 +36,7 @@ public abstract class Player extends Entity {
 
     public abstract GameProfile getProfile();
 
-    public abstract UUID getUUID();
-
     public abstract String getName();
+
+    public abstract UUID getUUID();
 }

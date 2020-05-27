@@ -5,6 +5,7 @@ import com.pipe.entity.EntityPlayer;
 import com.pipe.main.Server;
 import com.pipe.netty.EnumConnectionState;
 import com.pipe.netty.NetworkManager;
+import com.pipe.netty.PacketBuffer;
 import com.pipe.netty.packet.login.CPacketEncryptionResponse;
 import com.pipe.netty.packet.login.CPacketLoginStart;
 import com.pipe.netty.packet.login.SPacketLoginSuccess;
@@ -16,6 +17,7 @@ import com.pipe.world.EnumDifficulty;
 import com.pipe.world.EnumGameType;
 import com.pipe.world.EnumWorldType;
 import com.pipe.world.chunk.Chunk;
+import io.netty.buffer.Unpooled;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -51,13 +53,15 @@ public class NetHandlerLogin implements INetHandlerLogin, INetHandler {
         networkManager.setNetHandler(new PlayerConnection(this.networkManager, player));
 
         networkManager.sendPacket(new SPacketJoinGame(player.id, EnumGameType.SURVIVAL, false, 0, EnumDifficulty.EASY, 300, EnumWorldType.DEFAULT, false));
-        networkManager.sendPacket(new SPacketPlayerAbilities());
-        networkManager.sendPacket(new SPacketPlayerListItem(gameProfile, SPacketPlayerListItem.Action.ADD_PLAYER));
+        networkManager.sendPacket(new SPacketCustomPayload("MC|Brand", new PacketBuffer(Unpooled.buffer()).writeString("PIPE")));
+        networkManager.sendPacket(new SPacketServerDifficulty(EnumDifficulty.EASY));
+        networkManager.sendPacket(new SPacketPlayerAbilities()); // TODO
+
+        Server.getServer().registerConnection(player);
+
         networkManager.sendPacket(new SPacketPlayerPosLook(0, 160, 0, 90.0F, 0.0F, Collections.emptySet(), 0));
         networkManager.sendPacket(new SPacketSpawnPosition(new BlockPos(0, 160, 0)));
         networkManager.sendPacket(new SPacketChat(new TextComponentString("§f \n Bonjour §b" + packet.getUsername() + "§r, tu es connecté sur un serveur utilisant §ePipe §run serveur Minecraft léger et rapide développé par §eiRandomXx.\n §r")));
-
-        Server.getServer().registerConnection(player);
 
         for (int x = -3; x < 3; x++) {
             for (int z = -3; z < 3; z++) {

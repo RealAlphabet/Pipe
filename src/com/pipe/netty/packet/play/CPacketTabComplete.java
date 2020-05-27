@@ -11,14 +11,15 @@ public class CPacketTabComplete implements Packet<INetHandlerPlay> {
     private boolean hasTargetBlock;
     private BlockPos targetBlock;
 
+    ///////////////////////////////////////////////////////////////////////////
+
     @Override
     public void read(PacketBuffer buf) {
         this.message = buf.readStringFromBuffer(32767);
         this.hasTargetBlock = buf.readBoolean();
 
-        if (buf.readBoolean()) {
+        if (buf.readBoolean())
             this.targetBlock = buf.readBlockPos();
-        }
     }
 
     @Override
@@ -26,11 +27,17 @@ public class CPacketTabComplete implements Packet<INetHandlerPlay> {
         handler.handleTabComplete(this);
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+
     public String getMessage() {
         return message;
     }
 
     public BlockPos getTargetBlock() {
         return targetBlock;
+    }
+
+    public boolean hasTargetBlock() {
+        return hasTargetBlock;
     }
 }
