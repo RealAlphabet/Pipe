@@ -21,7 +21,8 @@ public class EntityPlayer extends Player {
 
     public GameProfile profile;
     public PlayerConnection connection;
-
+    public EnumGameType gametype;
+    
     ///////////////////////////////////////////////////////////////////////////
 
     public EntityPlayer(GameProfile profile) {
@@ -119,6 +120,17 @@ public class EntityPlayer extends Player {
         connection.sendPacket(new SPacketDisconnect(reason));
         connection.closeConnection();
     }
+    
+    ///////////////////////////////////////////////////////////////////////////
+	//  GAMEMODE
+	///////////////////////////////////////////////////////////////////////////
+    
+    @Override
+    public void setGameMode(EnumGameType type) {
+    	connection.sendPacket(new SPacketChangeGameState(3, type.getId()));
+    	connection.sendPacket(new SPacketPlayerAbilities(type.getPlayerCapabilities()));
+    	gametype = type;
+    }
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -138,5 +150,10 @@ public class EntityPlayer extends Player {
     @Override
     public UUID getUUID() {
         return profile.getId();
+    }
+    
+    @Override
+    public EnumGameType getGameMode() {
+    	return gametype;
     }
 }
