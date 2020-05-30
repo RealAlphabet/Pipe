@@ -13,6 +13,7 @@ public class CommandExecutor {
     static {
         registerCommand(new CommandTeleport());
         registerCommand(new CommandKick());
+        registerCommand(new CommandGameMode());
     }
 
 
