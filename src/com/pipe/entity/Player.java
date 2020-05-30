@@ -28,7 +28,12 @@ public abstract class Player extends Entity {
     public abstract void kick(String reason);
 
     public abstract void kick(ITextComponent reason);
+    
+    ///////////////////////////////////////////////////////////////////////////
+	//  GAMEMODE
+	///////////////////////////////////////////////////////////////////////////
 
+    public abstract void setGameMode(EnumGameType type);
 
     ///////////////////////////////////////////////////////////////////////////
     //  GETTERS
@@ -39,4 +44,6 @@ public abstract class Player extends Entity {
     public abstract String getName();
 
     public abstract UUID getUUID();
+    
+    public abstract EnumGameType getGameMode();
 }
