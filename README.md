@@ -8,7 +8,7 @@ Here is the todo list if you want to implement them. Don't forget to modify the 
 - [ ] Add basic commands
   - [X] /tp
   - [ ] /give
-  - [ ] /gamemode
+  - [X] /gamemode
   - [ ] /about
   - [ ] /effect
   - [ ] /clear
