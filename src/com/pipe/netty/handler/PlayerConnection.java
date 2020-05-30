@@ -92,7 +92,7 @@ public class PlayerConnection implements INetHandlerPlay, INetHandler {
                 entityPlayer.health = 20.0F;
 
                 networkManager.sendPacket(new SPacketRespawn(0, EnumDifficulty.EASY, EnumGameType.SURVIVAL, EnumWorldType.CUSTOMIZED));
-                networkManager.sendPacket(new SPacketPlayerAbilities());
+                networkManager.sendPacket(new SPacketPlayerAbilities(EnumGameType.SURVIVAL.getPlayerCapabilities()));
 
                 for (Player player : Server.getServer().getOnlinePlayers()) {
                     if (player == entityPlayer) return;

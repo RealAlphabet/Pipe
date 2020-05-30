@@ -55,8 +55,7 @@ public class NetHandlerLogin implements INetHandlerLogin, INetHandler {
         networkManager.sendPacket(new SPacketJoinGame(player.id, EnumGameType.SURVIVAL, false, 0, EnumDifficulty.EASY, 300, EnumWorldType.DEFAULT, false));
         networkManager.sendPacket(new SPacketCustomPayload("MC|Brand", new PacketBuffer(Unpooled.buffer()).writeString("PIPE")));
         networkManager.sendPacket(new SPacketServerDifficulty(EnumDifficulty.EASY));
-        networkManager.sendPacket(new SPacketPlayerAbilities()); // TODO
-
+        networkManager.sendPacket(new SPacketPlayerAbilities(EnumGameType.SURVIVAL.getPlayerCapabilities()));
         Server.getServer().registerConnection(player);
 
         networkManager.sendPacket(new SPacketPlayerPosLook(0, 160, 0, 90.0F, 0.0F, Collections.emptySet(), 0));

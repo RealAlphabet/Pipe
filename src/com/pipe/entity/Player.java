@@ -3,6 +3,7 @@ package com.pipe.entity;
 import com.mojang.authlib.GameProfile;
 import com.pipe.util.text.ChatType;
 import com.pipe.util.text.ITextComponent;
+import com.pipe.world.EnumGameType;
 
 import java.util.UUID;
 

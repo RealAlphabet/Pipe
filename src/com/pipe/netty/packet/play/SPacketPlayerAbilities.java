@@ -1,5 +1,6 @@
 package com.pipe.netty.packet.play;
 
+import com.pipe.entity.PlayerCapabilities;
 import com.pipe.netty.PacketBuffer;
 import com.pipe.netty.handler.INetHandlerPlay;
 import com.pipe.netty.packet.Packet;
@@ -15,12 +16,12 @@ public class SPacketPlayerAbilities implements Packet<INetHandlerPlay> {
 
     ///////////////////////////////////////////////////////////////////////////
 
-    public SPacketPlayerAbilities() {
-        // TODO
-        flying = true;
-        allowFlying = true;
-        flySpeed = 0.1F;
-        walkSpeed = 0.1F;
+    public SPacketPlayerAbilities(PlayerCapabilities pc) {
+        flying = pc.isFlying();
+        allowFlying = pc.isAllowFlying();
+        flySpeed = pc.getFlySpeed();
+        walkSpeed = pc.getWalkSpeed();
+        creativeMode = pc.isCreativeMode();
     }
 
     ///////////////////////////////////////////////////////////////////////////
